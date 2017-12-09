@@ -1,0 +1,20 @@
+{
+    "entry": "tests.pwn",
+    "output": "tests.amx",
+    "dependencies": [
+        "Southclaws/samp-stdlib",
+        "Zeex/samp-plugin-crashdetect/include"
+    ],
+    "builds": [
+        {
+            "name": "main"
+        },
+        {
+            "name": "pre",
+            "args": ["-l"]
+        }
+    ],
+    "runtime": {
+        "plugins": ["Zeex/samp-plugin-crashdetect"]
+    }
+}
