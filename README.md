@@ -48,6 +48,7 @@ The syntax is the same for `dbg` as `log` but with one extra parameter which
 describes the debug handler name:
 
 ```pawn
+logger_debug("weapons", true); // activate the "weapons" debug handler
 dbg("weapons", "player changed weapon",
     _i("weaponid", 31));
 ```
