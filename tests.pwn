@@ -32,6 +32,15 @@ main() {
     logger_debug("mydebugger", false);
     dbg("mydebugger", "something happened");
 
+    print("\nsome err() calls\n");
+
+    err("an error has happened");
+
+    err("an error has happened with values",
+        _i("worldid", 4),
+        _f("health", 64.5),
+        _s("message", "tim said \"hello\".")
+    );
 
     print("\n- end -");
 }

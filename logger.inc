@@ -99,12 +99,12 @@ stock err(text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
-		print(_s("text", text));
+		print(_:_s("text", text));
 		return;
 	}
 
 	new result[MAX_EVENT_LENGTH];
-	strcat(result, _s("text", text));
+	strcat(result, _:_s("text", text));
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
