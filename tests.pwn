@@ -5,7 +5,7 @@ main() {
     str = "this \"contains\" quotes";
     printf("using test string: '%s'", str);
     printf("- escaped: '%s'", quote_escape(str));
-    printf("- with _s: '%s'", _s("name", str));
+    printf("- with _s: '%s'", _:_s("name", str));
 
     print("\nsome log() calls\n");
 

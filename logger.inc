@@ -1,35 +1,7 @@
-/*==============================================================================
-
-
-	SA:MP Logging Library
-
-		This is a minimal logging library with a small set of functions for
-		logging, conditional debugging and error tracebacks.
-
-		Copyright (C) 2017 Barnaby "Southclaws" Keene
-
-		This program is free software: you can redistribute it and/or modify it
-		under the terms of the GNU General Public License as published by the
-		Free Software Foundation, either version 3 of the License, or (at your
-		option) any later version.
-
-		This program is distributed in the hope that it will be useful, but
-		WITHOUT ANY WARRANTY; without even the implied warranty of
-		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-		See the GNU General Public License for more details.
-
-		You should have received a copy of the GNU General Public License along
-		with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
-==============================================================================*/
-
-
 #if defined _logger_inc
 	#endinput
 #endif
 #define _logger_inc
-
 
 #include <a_samp>
 #include <crashdetect>
@@ -47,6 +19,9 @@
 #define MAX_FIELD_LENGTH	(MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE)
 #define MAX_EVENT_LENGTH	(MAX_EVENT_TEXT + (MAX_EVENT_FIELDS * MAX_FIELD_LENGTH))
 
+forward LOGGER_FIELD:_i(field[], value);
+forward LOGGER_FIELD:_f(field[], Float:value);
+forward LOGGER_FIELD:_s(field[], value[]);
 
 // log is a structured log event printer, it takes a text parameter which describes the event
 // followed by zero or more `LOGGER_FIELD` strings which are generated using `_i`, `_f` and `_s`.
@@ -63,12 +38,12 @@ stock log(text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
-		print(_s("text", text));
+		print(_:_s("text", text));
 		return;
 	}
 
 	new result[MAX_EVENT_LENGTH];
-	strcat(result, _s("text", text));
+	strcat(result, _:_s("text", text));
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -96,12 +71,12 @@ stock dbg(handler[], text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
-		print(_s("text", text));
+		print(_:_s("text", text));
 		return;
 	}
 
 	new result[MAX_EVENT_LENGTH];
-	strcat(result, _s("text", text));
+	strcat(result, _:_s("text", text));
 
 	for(new arg = 2; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
