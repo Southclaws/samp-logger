@@ -70,7 +70,7 @@ stock dbg(handler[], text[], LOGGER_FIELD:...) {
 
 	new total = numargs();
 
-	if (total == 1) {
+	if (total == 2) {
 		print(_:_s("text", text));
 		return;
 	}
