@@ -149,8 +149,8 @@ stock fatal(text[], LOGGER_FIELD:...) {
 	PrintAmxBacktrace();
 
 	// trigger a crash to escape the gamemode
-	new File:f = fopen("nonexistentfile", io_read), _s[1];
-	fread(f, _s);
+	new File:f = fopen("nonexistentfile", io_read), tmp[1];
+	fread(f, tmp);
 	fclose(f);
 }
 

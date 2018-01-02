@@ -5,12 +5,16 @@ logging and debugging.
 
 ## Installation
 
-With sampctl, simply add the GitHub path to your `dependencies`:
+Simply install to your project:
 
-```json
-{
-    "dependencies": ["Southclaws/samp-logger"]
-}
+```bash
+sampctl package install Owner/library
+```
+
+Include in your code and begin using the library:
+
+```pawn
+#include <library>
 ```
 
 ## Usage

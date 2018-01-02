@@ -1,4 +1,6 @@
 {
+    "user": "Southclaws",
+    "repo": "samp-logger",
     "entry": "tests.pwn",
     "output": "tests.amx",
     "dependencies": [
@@ -13,8 +15,5 @@
             "name": "pre",
             "args": ["-l"]
         }
-    ],
-    "runtime": {
-        "plugins": ["Zeex/samp-plugin-crashdetect"]
-    }
+    ]
 }
