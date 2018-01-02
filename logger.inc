@@ -126,7 +126,7 @@ stock fatal(text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
-		print(_s("text", text));
+		print(_:_s("text", text));
 		return;
 	}
 
