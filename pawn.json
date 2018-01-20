@@ -12,5 +12,8 @@
             "name": "pre",
             "args": ["-l"]
         }
-    ]
+    ],
+    "runtime": {
+        "mode": "main"
+    }
 }
