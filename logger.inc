@@ -1,7 +1,13 @@
-#if defined _logger_inc
+// built-in include guard removal
+// just in case the user has a local dependency with the same file name
+#if defined _inc_logger
+	#undef _inc_logger
+#endif
+// custom include-guard to ensure we don't duplicate
+#if defined _logger_included
 	#endinput
 #endif
-#define _logger_inc
+#define _logger_included
 
 #include <a_samp>
 #include <crashdetect>
