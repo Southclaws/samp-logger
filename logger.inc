@@ -13,15 +13,28 @@
 #include <crashdetect>
 
 
-// An event represents a single log
-// a log contains a text and zero or more fields
+// An event represents a single log event
+// a log event contains one or more fields
 // a field is composed of a name, an equals sign and a value
 // if a value is a string, it is enclosed in quotes
-// if a value is a string that contains quotes, they are escapeds
-#define MAX_EVENT_FIELDS	(8)
-#define MAX_EVENT_TEXT		(64)
-#define MAX_FIELD_NAME		(16)
-#define MAX_FIELD_VALUE		(64)
+// if a value is a string that contains quotes, they are escaped
+
+#if !defined MAX_EVENT_FIELDS
+	#define MAX_EVENT_FIELDS (8)
+#endif
+
+#if !defined MAX_EVENT_TEXT
+	#define MAX_EVENT_TEXT (64)
+#endif
+
+#if !defined MAX_FIELD_NAME
+	#define MAX_FIELD_NAME (16)
+#endif
+
+#if !defined MAX_FIELD_VALUE
+	#define MAX_FIELD_VALUE (64)
+#endif
+
 #define MAX_FIELD_LENGTH	(MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE)
 #define MAX_EVENT_LENGTH	(MAX_EVENT_TEXT + (MAX_EVENT_FIELDS * MAX_FIELD_LENGTH))
 
@@ -199,7 +212,7 @@ stock quote_escape(value[]) {
 		tmp[MAX_FIELD_VALUE],
 		j;
 
-	for(new i; value[i] != EOS; ++i) {
+	for(new i; value[i] != EOS && i < MAX_FIELD_VALUE; ++i) {
 		if(value[i] == '"') {
 			tmp[j++] = '\\';
 		}
