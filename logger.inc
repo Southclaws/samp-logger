@@ -201,24 +201,23 @@ stock LOGGER_FIELD:_f(field[], Float:value) {
 // _i is a log field converter for strings, it takes a named string and
 // returns a log field representation of it.
 stock LOGGER_FIELD:_s(field[], value[]) {
+	new quoted[MAX_FIELD_VALUE];
+	quote_escape(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
+
 	new result[MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE];
-	format(result, sizeof(result), "%s=\"%s\"", field, quote_escape(value));
+	format(result, sizeof(result), "%s=\"%s\"", field, quoted);
 	return LOGGER_FIELD:result;
 }
 
 // quote_escape returns a copy of value with all quotes escaped with backslashes
-stock quote_escape(value[]) {
-	new
-		tmp[MAX_FIELD_VALUE],
-		j;
+stock quote_escape(input[], inputLen, output[], outputLen) {
+	new j;
 
-	for(new i; value[i] != EOS && i < MAX_FIELD_VALUE && j < MAX_FIELD_VALUE - 1; ++i) {
-		if(value[i] == '"') {
-			tmp[j++] = '\\';
+	for(new i; input[i] != EOS && i < inputLen && j < (outputLen - 1); ++i) {
+		if(input[i] == '"') {
+			output[j++] = '\\';
 		}
-		tmp[j++] = value[i];
+		output[j++] = input[i];
 	}
-	tmp[j] = EOS;
-
-	return tmp;
+	output[j] = EOS;
 }
