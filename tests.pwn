@@ -1,8 +1,8 @@
 #include "logger.inc"
 
 main() {
-    new str[128];
-    str = "this \"contains\" quotes";
+    new str[256];
+    str = "this \"contains\" quotes and is a very long string because there was a bug discovered a while back that caused a crash if the parameter to this function was long so this ensures that bug is fixed.";
     printf("using test string: '%s'", str);
     printf("- escaped: '%s'", quote_escape(str));
     printf("- with _s: '%s'", _:_s("name", str));

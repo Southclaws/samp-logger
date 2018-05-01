@@ -24,7 +24,7 @@
 #endif
 
 #if !defined MAX_EVENT_TEXT
-	#define MAX_EVENT_TEXT (64)
+	#define MAX_EVENT_TEXT (256)
 #endif
 
 #if !defined MAX_FIELD_NAME
@@ -212,7 +212,7 @@ stock quote_escape(value[]) {
 		tmp[MAX_FIELD_VALUE],
 		j;
 
-	for(new i; value[i] != EOS && i < MAX_FIELD_VALUE; ++i) {
+	for(new i; value[i] != EOS && i < MAX_FIELD_VALUE && j < MAX_FIELD_VALUE - 1; ++i) {
 		if(value[i] == '"') {
 			tmp[j++] = '\\';
 		}
