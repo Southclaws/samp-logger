@@ -23,20 +23,16 @@
 	#define MAX_EVENT_FIELDS (8)
 #endif
 
-#if !defined MAX_EVENT_TEXT
-	#define MAX_EVENT_TEXT (256)
-#endif
-
 #if !defined MAX_FIELD_NAME
 	#define MAX_FIELD_NAME (16)
 #endif
 
 #if !defined MAX_FIELD_VALUE
-	#define MAX_FIELD_VALUE (64)
+	#define MAX_FIELD_VALUE (256)
 #endif
 
-#define MAX_FIELD_LENGTH	(MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE)
-#define MAX_EVENT_LENGTH	(MAX_EVENT_TEXT + (MAX_EVENT_FIELDS * MAX_FIELD_LENGTH))
+#define MAX_FIELD_LENGTH	(MAX_FIELD_NAME + 3 + MAX_FIELD_VALUE)
+#define MAX_EVENT_LENGTH	(MAX_EVENT_FIELDS * MAX_FIELD_LENGTH)
 
 forward LOGGER_FIELD:_i(field[], value);
 forward LOGGER_FIELD:_f(field[], Float:value);
@@ -204,7 +200,7 @@ stock LOGGER_FIELD:_s(field[], value[]) {
 	new quoted[MAX_FIELD_VALUE];
 	quote_escape(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
 
-	new result[MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE];
+	new result[MAX_FIELD_NAME + 3 + MAX_FIELD_VALUE];
 	format(result, sizeof(result), "%s=\"%s\"", field, quoted);
 	return LOGGER_FIELD:result;
 }
