@@ -6,11 +6,13 @@
     "dependencies": ["Southclaws/samp-stdlib", "Zeex/samp-plugin-crashdetect:v4.19"],
     "builds": [
         {
-            "name": "main"
+            "name": "main",
+            "version": "3.10.9"
         },
         {
             "name": "pre",
-            "args": ["-l"]
+            "args": ["-l"],
+            "version": "3.10.9"
         }
     ],
     "runtime": {
