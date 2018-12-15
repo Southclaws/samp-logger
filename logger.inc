@@ -34,9 +34,9 @@
 #define MAX_FIELD_LENGTH	(MAX_FIELD_NAME + 3 + MAX_FIELD_VALUE)
 #define MAX_EVENT_LENGTH	(MAX_EVENT_FIELDS * MAX_FIELD_LENGTH)
 
-forward LOGGER_FIELD:_i(field[], value);
-forward LOGGER_FIELD:_f(field[], Float:value);
-forward LOGGER_FIELD:_s(field[], value[]);
+forward LOGGER_FIELD:_i(const field[], value);
+forward LOGGER_FIELD:_f(const field[], Float:value);
+forward LOGGER_FIELD:_s(const field[], const value[]);
 
 // log is a structured log event printer, it takes a text parameter which describes the event
 // followed by zero or more `LOGGER_FIELD` strings which are generated using `_i`, `_f` and `_s`.
@@ -49,7 +49,7 @@ forward LOGGER_FIELD:_s(field[], value[]);
 // this would be formatted as:
 // text="an event has happened with values" worldid=4 health=64.500000 message="tim said \"hello\"."
 // quotes in messages are escaped in order to make parsing the logs easier.
-stock log(text[], LOGGER_FIELD:...) {
+stock log(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
@@ -78,7 +78,7 @@ stock log(text[], LOGGER_FIELD:...) {
 // dbg is a conditional version of log, it behaves the same but with one extra parameter which is
 // the name of the debug handler. Internally, this is just an SVar and simply checks if the value
 // is non-zero before continuing the print the event.
-stock dbg(handler[], text[], LOGGER_FIELD:...) {
+stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	if(GetSVarInt(handler) == 0) {
 		return;
 	}
@@ -110,7 +110,7 @@ stock dbg(handler[], text[], LOGGER_FIELD:...) {
 	print(result);
 }
 
-stock err(text[], LOGGER_FIELD:...) {
+stock err(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
@@ -137,7 +137,7 @@ stock err(text[], LOGGER_FIELD:...) {
 	PrintAmxBacktrace();
 }
 
-stock fatal(text[], LOGGER_FIELD:...) {
+stock fatal(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
@@ -169,7 +169,7 @@ stock fatal(text[], LOGGER_FIELD:...) {
 	fclose(f);
 }
 
-stock logger_debug(handler[], bool:toggle) {
+stock logger_debug(const handler[], bool:toggle) {
 	if(toggle) {
 		SetSVarInt(handler, 1);
 	} else {
@@ -180,7 +180,7 @@ stock logger_debug(handler[], bool:toggle) {
 
 // _i is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it.
-stock LOGGER_FIELD:_i(field[], value) {
+stock LOGGER_FIELD:_i(const field[], value) {
 	new result[MAX_FIELD_NAME + 1 + 12];
 	format(result, sizeof(result), "%s=%d", field, value);
 	return LOGGER_FIELD:result;
@@ -188,7 +188,7 @@ stock LOGGER_FIELD:_i(field[], value) {
 
 // _f is a log field converter for floats, it takes a named float and
 // returns a log field representation of it.
-stock LOGGER_FIELD:_f(field[], Float:value) {
+stock LOGGER_FIELD:_f(const field[], Float:value) {
 	new result[MAX_FIELD_NAME + 1 + 64];
 	format(result, sizeof(result), "%s=%f", field, value);
 	return LOGGER_FIELD:result;
@@ -196,7 +196,7 @@ stock LOGGER_FIELD:_f(field[], Float:value) {
 
 // _i is a log field converter for strings, it takes a named string and
 // returns a log field representation of it.
-stock LOGGER_FIELD:_s(field[], value[]) {
+stock LOGGER_FIELD:_s(const field[], const value[]) {
 	new quoted[MAX_FIELD_VALUE];
 	quote_escape(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
 
@@ -206,7 +206,7 @@ stock LOGGER_FIELD:_s(field[], value[]) {
 }
 
 // quote_escape returns a copy of value with all quotes escaped with backslashes
-stock quote_escape(input[], inputLen, output[], outputLen) {
+stock quote_escape(const input[], inputLen, output[], outputLen) {
 	new j;
 
 	for(new i; input[i] != EOS && i < inputLen && j < (outputLen - 1); ++i) {
