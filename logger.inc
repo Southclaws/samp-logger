@@ -40,6 +40,10 @@ forward LOGGER_FIELD:_x(const field[], value);
 forward LOGGER_FIELD:_f(const field[], Float:value);
 forward LOGGER_FIELD:_s(const field[], const value[]);
 
+static
+	FieldBuffer[MAX_FIELD_LENGTH],
+	EventBuffer[MAX_EVENT_LENGTH];
+
 // log is a structured log event printer, it takes a text parameter which describes the event
 // followed by zero or more `LOGGER_FIELD` strings which are generated using `_i`, `_f` and `_s`.
 // example:
@@ -59,22 +63,22 @@ stock log(const text[], LOGGER_FIELD:...) {
 		return;
 	}
 
-	new result[MAX_EVENT_LENGTH];
-	strcat(result, _:_s("text", text));
+	EventBuffer[0] = EOS;
+	strcat(EventBuffer, _:_s("text", text));
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
 		for(new ch; ch < MAX_FIELD_LENGTH; ++ch) {
 			field[ch] = getarg(arg, ch);
 			if(field[ch] == EOS) {
-				strcat(result, " ");
-				strcat(result, field);
+				strcat(EventBuffer, " ");
+				strcat(EventBuffer, field);
 				break;
 			}
 		}
 	}
 
-	print(result);
+	print(EventBuffer);
 }
 
 // dbg is a conditional version of log, it behaves the same but with one extra parameter which is
@@ -92,16 +96,16 @@ stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 		return;
 	}
 
-	new result[MAX_EVENT_LENGTH];
-	strcat(result, _:_s("text", text));
+	EventBuffer[0] = EOS;
+	strcat(EventBuffer, _:_s("text", text));
 
 	for(new arg = 2; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
 		for(new ch; ch < MAX_FIELD_LENGTH; ++ch) {
 			field[ch] = getarg(arg, ch);
 			if(field[ch] == EOS) {
-				strcat(result, " ");
-				strcat(result, field);
+				strcat(EventBuffer, " ");
+				strcat(EventBuffer, field);
 				break;
 			}
 		}
@@ -109,7 +113,7 @@ stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 
 	// todo: process crashdetect backtrace to grab call site
 
-	print(result);
+	print(EventBuffer);
 }
 
 stock err(const text[], LOGGER_FIELD:...) {
@@ -120,22 +124,22 @@ stock err(const text[], LOGGER_FIELD:...) {
 		return;
 	}
 
-	new result[MAX_EVENT_LENGTH];
-	strcat(result, _:_s("text", text));
+	EventBuffer[0] = EOS;
+	strcat(EventBuffer, _:_s("text", text));
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
 		for(new ch; ch < MAX_FIELD_LENGTH; ++ch) {
 			field[ch] = getarg(arg, ch);
 			if(field[ch] == EOS) {
-				strcat(result, " ");
-				strcat(result, field);
+				strcat(EventBuffer, " ");
+				strcat(EventBuffer, field);
 				break;
 			}
 		}
 	}
 
-	print(result);
+	print(EventBuffer);
 	PrintAmxBacktrace();
 }
 
@@ -147,22 +151,22 @@ stock fatal(const text[], LOGGER_FIELD:...) {
 		return;
 	}
 
-	new result[MAX_EVENT_LENGTH];
-	strcat(result, text);
+	EventBuffer[0] = EOS;
+	strcat(EventBuffer, text);
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
 		for(new ch; ch < MAX_FIELD_LENGTH; ++ch) {
 			field[ch] = getarg(arg, ch);
 			if(field[ch] == EOS) {
-				strcat(result, " ");
-				strcat(result, field);
+				strcat(EventBuffer, " ");
+				strcat(EventBuffer, field);
 				break;
 			}
 		}
 	}
 
-	print(result);
+	print(EventBuffer);
 	PrintAmxBacktrace();
 
 	// trigger a crash to escape the gamemode
@@ -183,33 +187,33 @@ stock logger_debug(const handler[], bool:toggle) {
 // _i is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it.
 stock LOGGER_FIELD:_i(const field[], value) {
-	new result[MAX_FIELD_NAME + 1 + 12];
-	format(result, sizeof(result), "%s=%d", field, value);
-	return LOGGER_FIELD:result;
+	FieldBuffer[0] = EOS;
+	format(FieldBuffer, sizeof(FieldBuffer), "%s=%d", field, value);
+	return LOGGER_FIELD:FieldBuffer;
 }
 
 // _b is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in binary.
 stock LOGGER_FIELD:_b(const field[], value) {
-	new result[MAX_FIELD_NAME + 1 + 33];
-	format(result, sizeof(result), "%s=%b", field, value);
-	return LOGGER_FIELD:result;
+	FieldBuffer[0] = EOS;
+	format(FieldBuffer, sizeof(FieldBuffer), "%s=%b", field, value);
+	return LOGGER_FIELD:FieldBuffer;
 }
 
 // _x is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in hexadecimal.
 stock LOGGER_FIELD:_x(const field[], value) {
-	new result[MAX_FIELD_NAME + 1 + 9];
-	format(result, sizeof(result), "%s=%x", field, value);
-	return LOGGER_FIELD:result;
+	FieldBuffer[0] = EOS;
+	format(FieldBuffer, sizeof(FieldBuffer), "%s=%x", field, value);
+	return LOGGER_FIELD:FieldBuffer;
 }
 
 // _f is a log field converter for floats, it takes a named float and
 // returns a log field representation of it.
 stock LOGGER_FIELD:_f(const field[], Float:value) {
-	new result[MAX_FIELD_NAME + 1 + 64];
-	format(result, sizeof(result), "%s=%f", field, value);
-	return LOGGER_FIELD:result;
+	FieldBuffer[0] = EOS;
+	format(FieldBuffer, sizeof(FieldBuffer), "%s=%f", field, value);
+	return LOGGER_FIELD:FieldBuffer;
 }
 
 // _i is a log field converter for strings, it takes a named string and
@@ -218,9 +222,9 @@ stock LOGGER_FIELD:_s(const field[], const value[]) {
 	new quoted[MAX_FIELD_VALUE];
 	quote_escape(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
 
-	new result[MAX_FIELD_NAME + 3 + MAX_FIELD_VALUE];
-	format(result, sizeof(result), "%s=\"%s\"", field, quoted);
-	return LOGGER_FIELD:result;
+	FieldBuffer[0] = EOS;
+	format(FieldBuffer, sizeof(FieldBuffer), "%s=\"%s\"", field, quoted);
+	return LOGGER_FIELD:FieldBuffer;
 }
 
 // quote_escape returns a copy of value with all quotes escaped with backslashes
