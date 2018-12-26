@@ -35,6 +35,8 @@
 #define MAX_EVENT_LENGTH	(MAX_EVENT_FIELDS * MAX_FIELD_LENGTH)
 
 forward LOGGER_FIELD:_i(const field[], value);
+forward LOGGER_FIELD:_b(const field[], value);
+forward LOGGER_FIELD:_x(const field[], value);
 forward LOGGER_FIELD:_f(const field[], Float:value);
 forward LOGGER_FIELD:_s(const field[], const value[]);
 
@@ -183,6 +185,22 @@ stock logger_debug(const handler[], bool:toggle) {
 stock LOGGER_FIELD:_i(const field[], value) {
 	new result[MAX_FIELD_NAME + 1 + 12];
 	format(result, sizeof(result), "%s=%d", field, value);
+	return LOGGER_FIELD:result;
+}
+
+// _b is a log field converter for integers, it takes a named integer and
+// returns a log field representation of it in binary.
+stock LOGGER_FIELD:_b(const field[], value) {
+	new result[MAX_FIELD_NAME + 1 + 33];
+	format(result, sizeof(result), "%s=%b", field, value);
+	return LOGGER_FIELD:result;
+}
+
+// _x is a log field converter for integers, it takes a named integer and
+// returns a log field representation of it in hexadecimal.
+stock LOGGER_FIELD:_x(const field[], value) {
+	new result[MAX_FIELD_NAME + 1 + 9];
+	format(result, sizeof(result), "%s=%x", field, value);
 	return LOGGER_FIELD:result;
 }
 
