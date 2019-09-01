@@ -60,7 +60,7 @@ stock log(const text[], LOGGER_FIELD:...) {
 
 	if (total == 1) {
 		print(_:_s("text", text));
-		return;
+		return 1;
 	}
 
 	EventBuffer[0] = EOS;
@@ -79,6 +79,7 @@ stock log(const text[], LOGGER_FIELD:...) {
 	}
 
 	print(EventBuffer);
+	return 1;
 }
 
 // dbg is a conditional version of log, it behaves the same but with one extra parameter which is
@@ -86,14 +87,14 @@ stock log(const text[], LOGGER_FIELD:...) {
 // is non-zero before continuing the print the event.
 stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	if(GetSVarInt(handler) == 0) {
-		return;
+		return 0;
 	}
 
 	new total = numargs();
 
 	if (total == 2) {
 		print(_:_s("text", text));
-		return;
+		return 1;
 	}
 
 	EventBuffer[0] = EOS;
@@ -114,6 +115,7 @@ stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	// todo: process crashdetect backtrace to grab call site
 
 	print(EventBuffer);
+	return 1;
 }
 
 stock err(const text[], LOGGER_FIELD:...) {
@@ -121,7 +123,7 @@ stock err(const text[], LOGGER_FIELD:...) {
 
 	if (total == 1) {
 		print(_:_s("text", text));
-		return;
+		return 1;
 	}
 
 	EventBuffer[0] = EOS;
@@ -141,6 +143,7 @@ stock err(const text[], LOGGER_FIELD:...) {
 
 	print(EventBuffer);
 	PrintAmxBacktrace();
+	return 1;
 }
 
 stock fatal(const text[], LOGGER_FIELD:...) {
@@ -148,7 +151,7 @@ stock fatal(const text[], LOGGER_FIELD:...) {
 
 	if (total == 1) {
 		print(_:_s("text", text));
-		return;
+		return 1;
 	}
 
 	EventBuffer[0] = EOS;
@@ -173,6 +176,7 @@ stock fatal(const text[], LOGGER_FIELD:...) {
 	new File:f = fopen("nonexistentfile", io_read), tmp[1];
 	fread(f, tmp);
 	fclose(f);
+	return 1;
 }
 
 stock logger_debug(const handler[], bool:toggle) {
