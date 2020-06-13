@@ -232,7 +232,7 @@ stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 #if defined SAMP_LOGGER_COMPAT
 stock logger_debug(const handler[], bool:toggle) {
 #else
-stock Logger_Debug(const handler[], bool:toggle) {
+stock Logger_ToggleDebug(const handler[], bool:toggle) {
 #endif
 	if(toggle) {
 		SetSVarInt(handler, 1);
