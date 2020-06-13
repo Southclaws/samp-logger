@@ -71,12 +71,20 @@ stock Logger_Log(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else 
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
 	EventBuffer[0] = EOS;
+	#if defined SAMP_LOGGER_COMPAT
 	strcat(EventBuffer, _:_s("text", text));
+	#else
+	strcat(EventBuffer, _:Logger_S("text", text));
+	#endif
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -108,12 +116,21 @@ stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 2) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
 	EventBuffer[0] = EOS;
+	
+	#if defined SAMP_LOGGER_COMPAT
 	strcat(EventBuffer, _:_s("text", text));
+	#else 
+	strcat(EventBuffer, _:Logger_S("text", text));
+	#endif
 
 	for(new arg = 2; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -140,12 +157,21 @@ stock Logger_Err(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
 	EventBuffer[0] = EOS;
+	
+	#if defined SAMP_LOGGER_COMPAT
 	strcat(EventBuffer, _:_s("text", text));
+	#else 
+	strcat(EventBuffer, _:Logger_S("text", text));
+	#endif
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -171,7 +197,11 @@ stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 1) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
