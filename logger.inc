@@ -34,7 +34,7 @@
 #define MAX_FIELD_LENGTH	(MAX_FIELD_NAME + 3 + MAX_FIELD_VALUE)
 #define MAX_EVENT_LENGTH	(MAX_EVENT_FIELDS * MAX_FIELD_LENGTH)
 
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 forward LOGGER_FIELD:_i(const field[], value);
 forward LOGGER_FIELD:_b(const field[], value);
 forward LOGGER_FIELD:_x(const field[], value);
@@ -63,10 +63,10 @@ static
 // this would be formatted as:
 // text="an event has happened with values" worldid=4 health=64.500000 message="tim said \"hello\"."
 // quotes in messages are escaped in order to make parsing the logs easier.
-#if !defined SAMP_LOGGER_COMPAT
-stock Logger_Log(const text[], LOGGER_FIELD:...) {
-#else 
+#if defined SAMP_LOGGER_COMPAT
 stock log(const text[], LOGGER_FIELD:...) {
+#else 
+stock Logger_Log(const text[], LOGGER_FIELD:...) {
 #endif
 	new total = numargs();
 
@@ -96,7 +96,7 @@ stock log(const text[], LOGGER_FIELD:...) {
 // dbg is a conditional version of log, it behaves the same but with one extra parameter which is
 // the name of the debug handler. Internally, this is just an SVar and simply checks if the value
 // is non-zero before continuing the print the event.
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 #else
 stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
@@ -132,7 +132,7 @@ stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	print(EventBuffer);
 }
 
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock err(const text[], LOGGER_FIELD:...) {
 #else
 stock Logger_Err(const text[], LOGGER_FIELD:...) {
@@ -163,7 +163,7 @@ stock Logger_Err(const text[], LOGGER_FIELD:...) {
 	PrintAmxBacktrace();
 }
 
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock fatal(const text[], LOGGER_FIELD:...) {
 #else
 stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
@@ -199,7 +199,7 @@ stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 	fclose(f);
 }
 
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock logger_debug(const handler[], bool:toggle) {
 #else
 stock Logger_Debug(const handler[], bool:toggle) {
@@ -214,7 +214,7 @@ stock Logger_Debug(const handler[], bool:toggle) {
 
 // _i is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it.
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_i(const field[], value) {
 #else 
 stock LOGGER_FIELD:Logger_I(const field[], value) {
@@ -226,7 +226,7 @@ stock LOGGER_FIELD:Logger_I(const field[], value) {
 
 // _b is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in binary.
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_b(const field[], value) {
 #else
 stock LOGGER_FIELD:Logger_B(const field[], value) {
@@ -238,7 +238,7 @@ stock LOGGER_FIELD:Logger_B(const field[], value) {
 
 // _x is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in hexadecimal.
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_x(const field[], value) {
 #else
 stock LOGGER_FIELD:Logger_X(const field[], value) {
@@ -250,7 +250,7 @@ stock LOGGER_FIELD:Logger_X(const field[], value) {
 
 // _f is a log field converter for floats, it takes a named float and
 // returns a log field representation of it.
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_f(const field[], Float:value) {
 #else
 stock LOGGER_FIELD:Logger_F(const field[], Float:value) {
@@ -262,14 +262,14 @@ stock LOGGER_FIELD:Logger_F(const field[], Float:value) {
 
 // _i is a log field converter for strings, it takes a named string and
 // returns a log field representation of it.
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_s(const field[], const value[]) {
 #else
 stock LOGGER_FIELD:Logger_S(const field[], const value[]) {
 #endif
 	new quoted[MAX_FIELD_VALUE];
 	
-	#if !defined SAMP_LOGGER_COMPAT
+	#if defined SAMP_LOGGER_COMPAT
 	quote_escape(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
 	#else
 	Logger_EscapeQuote(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
@@ -281,7 +281,7 @@ stock LOGGER_FIELD:Logger_S(const field[], const value[]) {
 }
 
 // quote_escape returns a copy of value with all quotes escaped with backslashes
-#if !defined SAMP_LOGGER_COMPAT
+#if defined SAMP_LOGGER_COMPAT
 stock quote_escape(const input[], inputLen, output[], outputLen) {
 #else
 stock Logger_EscapeQuote(const input[], inputLen, output[], outputLen) {
