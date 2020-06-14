@@ -45,7 +45,7 @@ forward LOGGER_FIELD:Logger_I(const field[], value);
 forward LOGGER_FIELD:Logger_B(const field[], value);
 forward LOGGER_FIELD:Logger_X(const field[], value);
 forward LOGGER_FIELD:Logger_F(const field[], Float:value);
-forward LOGGER_FIELD:Logger_F(const field[], const value[]);
+forward LOGGER_FIELD:Logger_S(const field[], const value[]);
 #endif
 
 static
