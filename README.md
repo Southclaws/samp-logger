@@ -16,6 +16,16 @@ Include in your code and begin using the library:
 #include <logger>
 ```
 
+## Compatibility 
+
+If you prefer to use the old function names, that were in previous versions of samp-logger, then you can re-enable them with the following defintion:
+
+```pawn
+#define SAMP_LOGGER_COMPAT
+```
+
+This will change the function names from the currently updated version.
+
 ## Usage
 
 To log an event:
