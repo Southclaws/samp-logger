@@ -34,11 +34,19 @@
 #define MAX_FIELD_LENGTH	(MAX_FIELD_NAME + 3 + MAX_FIELD_VALUE)
 #define MAX_EVENT_LENGTH	(MAX_EVENT_FIELDS * MAX_FIELD_LENGTH)
 
+#if defined SAMP_LOGGER_COMPAT
 forward LOGGER_FIELD:_i(const field[], value);
 forward LOGGER_FIELD:_b(const field[], value);
 forward LOGGER_FIELD:_x(const field[], value);
 forward LOGGER_FIELD:_f(const field[], Float:value);
 forward LOGGER_FIELD:_s(const field[], const value[]);
+#else
+forward LOGGER_FIELD:Logger_I(const field[], value);
+forward LOGGER_FIELD:Logger_B(const field[], value);
+forward LOGGER_FIELD:Logger_X(const field[], value);
+forward LOGGER_FIELD:Logger_F(const field[], Float:value);
+forward LOGGER_FIELD:Logger_S(const field[], const value[]);
+#endif
 
 static
 	FieldBuffer[MAX_FIELD_LENGTH],
@@ -55,16 +63,28 @@ static
 // this would be formatted as:
 // text="an event has happened with values" worldid=4 health=64.500000 message="tim said \"hello\"."
 // quotes in messages are escaped in order to make parsing the logs easier.
+#if defined SAMP_LOGGER_COMPAT
 stock log(const text[], LOGGER_FIELD:...) {
+#else 
+stock Logger_Log(const text[], LOGGER_FIELD:...) {
+#endif
 	new total = numargs();
 
 	if (total == 1) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else 
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
 	EventBuffer[0] = EOS;
+	#if defined SAMP_LOGGER_COMPAT
 	strcat(EventBuffer, _:_s("text", text));
+	#else
+	strcat(EventBuffer, _:Logger_S("text", text));
+	#endif
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -84,7 +104,11 @@ stock log(const text[], LOGGER_FIELD:...) {
 // dbg is a conditional version of log, it behaves the same but with one extra parameter which is
 // the name of the debug handler. Internally, this is just an SVar and simply checks if the value
 // is non-zero before continuing the print the event.
+#if defined SAMP_LOGGER_COMPAT
 stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
+#else
+stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
+#endif
 	if(GetSVarInt(handler) == 0) {
 		return;
 	}
@@ -92,12 +116,21 @@ stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
 	if (total == 2) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
 	EventBuffer[0] = EOS;
+	
+	#if defined SAMP_LOGGER_COMPAT
 	strcat(EventBuffer, _:_s("text", text));
+	#else 
+	strcat(EventBuffer, _:Logger_S("text", text));
+	#endif
 
 	for(new arg = 2; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -116,16 +149,29 @@ stock dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	print(EventBuffer);
 }
 
+#if defined SAMP_LOGGER_COMPAT
 stock err(const text[], LOGGER_FIELD:...) {
+#else
+stock Logger_Err(const text[], LOGGER_FIELD:...) {
+#endif
 	new total = numargs();
 
 	if (total == 1) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
 	EventBuffer[0] = EOS;
+	
+	#if defined SAMP_LOGGER_COMPAT
 	strcat(EventBuffer, _:_s("text", text));
+	#else 
+	strcat(EventBuffer, _:Logger_S("text", text));
+	#endif
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -143,11 +189,19 @@ stock err(const text[], LOGGER_FIELD:...) {
 	PrintAmxBacktrace();
 }
 
+#if defined SAMP_LOGGER_COMPAT
 stock fatal(const text[], LOGGER_FIELD:...) {
+#else
+stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
+#endif
 	new total = numargs();
 
 	if (total == 1) {
+		#if defined SAMP_LOGGER_COMPAT
 		print(_:_s("text", text));
+		#else
+		print(_:Logger_S("text", text));
+		#endif
 		return;
 	}
 
@@ -175,7 +229,11 @@ stock fatal(const text[], LOGGER_FIELD:...) {
 	fclose(f);
 }
 
+#if defined SAMP_LOGGER_COMPAT
 stock logger_debug(const handler[], bool:toggle) {
+#else
+stock Logger_ToggleDebug(const handler[], bool:toggle) {
+#endif
 	if(toggle) {
 		SetSVarInt(handler, 1);
 	} else {
@@ -186,7 +244,11 @@ stock logger_debug(const handler[], bool:toggle) {
 
 // _i is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it.
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_i(const field[], value) {
+#else 
+stock LOGGER_FIELD:Logger_I(const field[], value) {
+#endif
 	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%d", field, value);
 	return LOGGER_FIELD:FieldBuffer;
@@ -194,7 +256,11 @@ stock LOGGER_FIELD:_i(const field[], value) {
 
 // _b is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in binary.
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_b(const field[], value) {
+#else
+stock LOGGER_FIELD:Logger_B(const field[], value) {
+#endif
 	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%b", field, value);
 	return LOGGER_FIELD:FieldBuffer;
@@ -202,7 +268,11 @@ stock LOGGER_FIELD:_b(const field[], value) {
 
 // _x is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in hexadecimal.
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_x(const field[], value) {
+#else
+stock LOGGER_FIELD:Logger_X(const field[], value) {
+#endif
 	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%x", field, value);
 	return LOGGER_FIELD:FieldBuffer;
@@ -210,7 +280,11 @@ stock LOGGER_FIELD:_x(const field[], value) {
 
 // _f is a log field converter for floats, it takes a named float and
 // returns a log field representation of it.
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_f(const field[], Float:value) {
+#else
+stock LOGGER_FIELD:Logger_F(const field[], Float:value) {
+#endif
 	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%f", field, value);
 	return LOGGER_FIELD:FieldBuffer;
@@ -218,9 +292,18 @@ stock LOGGER_FIELD:_f(const field[], Float:value) {
 
 // _i is a log field converter for strings, it takes a named string and
 // returns a log field representation of it.
+#if defined SAMP_LOGGER_COMPAT
 stock LOGGER_FIELD:_s(const field[], const value[]) {
+#else
+stock LOGGER_FIELD:Logger_S(const field[], const value[]) {
+#endif
 	new quoted[MAX_FIELD_VALUE];
+	
+	#if defined SAMP_LOGGER_COMPAT
 	quote_escape(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
+	#else
+	Logger_EscapeQuote(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
+	#endif
 
 	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=\"%s\"", field, quoted);
@@ -228,7 +311,11 @@ stock LOGGER_FIELD:_s(const field[], const value[]) {
 }
 
 // quote_escape returns a copy of value with all quotes escaped with backslashes
+#if defined SAMP_LOGGER_COMPAT
 stock quote_escape(const input[], inputLen, output[], outputLen) {
+#else
+stock Logger_EscapeQuote(const input[], inputLen, output[], outputLen) {
+#endif
 	new j;
 
 	for(new i; input[i] != EOS && i < inputLen && j < (outputLen - 1); ++i) {

@@ -16,20 +16,30 @@ Include in your code and begin using the library:
 #include <logger>
 ```
 
+## Compatibility 
+
+If you prefer to use the old function names, that were in previous versions of samp-logger, then you can re-enable them with the following defintion:
+
+```pawn
+#define SAMP_LOGGER_COMPAT
+```
+
+This will change the function names from the currently updated version.
+
 ## Usage
 
 To log an event:
 
 ```pawn
-log("something happened!");
+Logger_Log("something happened!");
 ```
 
 To log an event with values to give the event more context:
 
 ```pawn
-log("player changed world",
-    _s("name", playerName),
-    _i("worldid", 4));
+Logger_Log("player changed world",
+    Logger_S("name", playerName),
+    Logger_I("worldid", 4));
 ```
 
 This would be printed as:
@@ -44,20 +54,20 @@ Which means you can easily read the log. The description of the event is isolate
 
 The library also includes a basic debug mechanism which uses the SVar system to facilitate named debug handlers which can be turned on and off at runtime.
 
-The syntax is the same for `dbg` as `log` but with one extra parameter which describes the debug handler name:
+The syntax is the same for `Logger_Dbg` as `Logger_Log` but with one extra parameter which describes the debug handler name:
 
 ```pawn
-logger_debug("weapons", true); // activate the "weapons" debug handler
-dbg("weapons", "player changed weapon",
-    _i("weaponid", 31));
+Logger_ToggleDebug("weapons", true); // activate the "weapons" debug handler
+Logger_Dbg("weapons", "player changed weapon",
+    Logger_I("weaponid", 31));
 ```
 
 ### Extending
 
-The logging functions are just string concatenation functions. All `_s` and friends do is format the string into a `key=value` format and simply return the string. So it's easy to write your own field converters:
+The logging functions are just string concatenation functions. All `Logger_S` and friends do is format the string into a `key=value` format and simply return the string. So it's easy to write your own field converters:
 
 ```pawn
-stock _w(name[], weaponid) {
+stock Logger_W(name[], weaponid) {
     new result[MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE];
     new weaponName[32];
     GetWeaponName(weaponid, weaponName, 32);
