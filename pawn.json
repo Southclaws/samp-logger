@@ -3,19 +3,8 @@
     "repo": "samp-logger",
     "entry": "tests.pwn",
     "output": "tests.amx",
-    "dependencies": ["Southclaws/samp-stdlib", "Zeex/samp-plugin-crashdetect:v4.20"],
-    "builds": [
-        {
-            "name": "main",
-            "version": "3.10.9"
-        },
-        {
-            "name": "pre",
-            "args": ["-l"],
-            "version": "3.10.9"
-        }
-    ],
-    "runtime": {
-        "mode": "main"
-    }
+    "dependencies": [
+        "pawn-lang/samp-stdlib",
+        "Zeex/samp-plugin-crashdetect:v4.20"
+    ]
 }
