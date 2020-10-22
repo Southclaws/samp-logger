@@ -58,13 +58,14 @@ static
 stock Logger_Log(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
+	format(EventBuffer, sizeof EventBuffer, "%s %s",
+		_:Logger_S("lvl", "info"),
+		_:Logger_S("msg", text)
+	);
+
 	if (total == 1) {
-		print(_:Logger_S("text", text));
 		return;
 	}
-
-	EventBuffer[0] = EOS;
-	strcat(EventBuffer, _:Logger_S("text", text));
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -91,13 +92,14 @@ stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
 
 	new total = numargs();
 
+	format(EventBuffer, sizeof EventBuffer, "%s %s",
+		_:Logger_S("lvl", "debug"),
+		_:Logger_S("msg", text)
+	);
+
 	if (total == 2) {
-		print(_:Logger_S("text", text));
 		return;
 	}
-
-	EventBuffer[0] = EOS;
-	strcat(EventBuffer, _:Logger_S("text", text));
 
 	for(new arg = 2; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -119,13 +121,14 @@ stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
 stock Logger_Err(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
+	format(EventBuffer, sizeof EventBuffer, "%s %s",
+		_:Logger_S("lvl", "error"),
+		_:Logger_S("msg", text)
+	);
+
 	if (total == 1) {
-		print(_:Logger_S("text", text));
 		return;
 	}
-
-	EventBuffer[0] = EOS;
-	strcat(EventBuffer, _:Logger_S("text", text));
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -146,13 +149,14 @@ stock Logger_Err(const text[], LOGGER_FIELD:...) {
 stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
+	format(EventBuffer, sizeof EventBuffer, "%s %s",
+		_:Logger_S("lvl", "fatal"),
+		_:Logger_S("msg", text)
+	);
+
 	if (total == 1) {
-		print(_:Logger_S("text", text));
 		return;
 	}
-
-	EventBuffer[0] = EOS;
-	strcat(EventBuffer, text);
 
 	for(new arg = 1; arg < total && arg < MAX_EVENT_FIELDS; ++arg) {
 		new field[MAX_FIELD_LENGTH];
@@ -187,7 +191,6 @@ stock Logger_ToggleDebug(const handler[], bool:toggle) {
 // Logger_I is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it.
 stock LOGGER_FIELD:Logger_I(const field[], value) {
-	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%d", field, value);
 	return LOGGER_FIELD:FieldBuffer;
 }
@@ -195,7 +198,6 @@ stock LOGGER_FIELD:Logger_I(const field[], value) {
 // Logger_B is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in binary.
 stock LOGGER_FIELD:Logger_B(const field[], value) {
-	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%b", field, value);
 	return LOGGER_FIELD:FieldBuffer;
 }
@@ -203,7 +205,6 @@ stock LOGGER_FIELD:Logger_B(const field[], value) {
 // Logger_X is a log field converter for integers, it takes a named integer and
 // returns a log field representation of it in hexadecimal.
 stock LOGGER_FIELD:Logger_X(const field[], value) {
-	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%x", field, value);
 	return LOGGER_FIELD:FieldBuffer;
 }
@@ -211,7 +212,6 @@ stock LOGGER_FIELD:Logger_X(const field[], value) {
 // Logger_F is a log field converter for floats, it takes a named float and
 // returns a log field representation of it.
 stock LOGGER_FIELD:Logger_F(const field[], Float:value) {
-	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=%f", field, value);
 	return LOGGER_FIELD:FieldBuffer;
 }
@@ -220,10 +220,7 @@ stock LOGGER_FIELD:Logger_F(const field[], Float:value) {
 // returns a log field representation of it.
 stock LOGGER_FIELD:Logger_S(const field[], const value[]) {
 	new quoted[MAX_FIELD_VALUE];
-	
 	Logger_EscapeQuote(value, MAX_FIELD_VALUE, quoted, MAX_FIELD_VALUE);
-
-	FieldBuffer[0] = EOS;
 	format(FieldBuffer, sizeof(FieldBuffer), "%s=\"%s\"", field, quoted);
 	return LOGGER_FIELD:FieldBuffer;
 }
