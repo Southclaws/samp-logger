@@ -20,7 +20,7 @@
 // if a value is a string that contains quotes, they are escaped
 
 #if !defined MAX_EVENT_FIELDS
-	#define MAX_EVENT_FIELDS (8)
+	#define MAX_EVENT_FIELDS (32)
 #endif
 
 #if !defined MAX_FIELD_NAME
