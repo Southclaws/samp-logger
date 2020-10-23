@@ -58,8 +58,7 @@ static
 stock Logger_Log(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
-	format(EventBuffer, sizeof EventBuffer, "%s %s",
-		_:Logger_S("lvl", "info"),
+	format(EventBuffer, sizeof EventBuffer, "lvl=\"info\" %s",
 		_:Logger_S("msg", text)
 	);
 
@@ -92,8 +91,7 @@ stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
 
 	new total = numargs();
 
-	format(EventBuffer, sizeof EventBuffer, "%s %s",
-		_:Logger_S("lvl", "debug"),
+	format(EventBuffer, sizeof EventBuffer, "lvl=\"debug\" %s",
 		_:Logger_S("msg", text)
 	);
 
@@ -121,8 +119,7 @@ stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
 stock Logger_Err(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
-	format(EventBuffer, sizeof EventBuffer, "%s %s",
-		_:Logger_S("lvl", "error"),
+	format(EventBuffer, sizeof EventBuffer, "lvl=\"error\" %s",
 		_:Logger_S("msg", text)
 	);
 
@@ -149,8 +146,7 @@ stock Logger_Err(const text[], LOGGER_FIELD:...) {
 stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 	new total = numargs();
 
-	format(EventBuffer, sizeof EventBuffer, "%s %s",
-		_:Logger_S("lvl", "fatal"),
+	format(EventBuffer, sizeof EventBuffer, "lvl=\"fatal\" %s",
 		_:Logger_S("msg", text)
 	);
 
