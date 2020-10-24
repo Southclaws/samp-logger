@@ -221,6 +221,19 @@ stock LOGGER_FIELD:Logger_S(const field[], const value[]) {
 	return LOGGER_FIELD:FieldBuffer;
 }
 
+// Logger_A is a log field converter for arrays, it takes a named array and
+// returns a log field representation of it where each cell is printed.
+stock LOGGER_FIELD:Logger_A(const field[], const value[], len = sizeof value) {
+	new array[MAX_FIELD_VALUE];
+	format(array, sizeof array, "%d", array, value[0]);
+	for(new i = 1; i < len; i++) {
+		format(array, sizeof array, "%s, %d", array, value[i]);
+	}
+	format(FieldBuffer, sizeof(FieldBuffer), "%s=\"[%s]\"", field, array);
+	return LOGGER_FIELD:FieldBuffer;
+}
+
+
 // quote_escape returns a copy of value with all quotes escaped with backslashes
 stock Logger_EscapeQuote(const input[], inputLen, output[], outputLen) {
 	new j;
