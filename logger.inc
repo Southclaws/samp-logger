@@ -233,6 +233,19 @@ stock LOGGER_FIELD:Logger_A(const field[], const value[], len = sizeof value) {
 	return LOGGER_FIELD:FieldBuffer;
 }
 
+// Logger_P is a log field converter for player names, it takes a player ID and
+// returns a log field with the player's name.
+stock LOGGER_FIELD:Logger_P(playerid) {
+	if(!IsPlayerConnected(playerid)) {
+		format(FieldBuffer, sizeof(FieldBuffer), "player=\"(disconnected)\"");
+	} else {
+		new name[MAX_PLAYER_NAME];
+		GetPlayerName(playerid, name, MAX_PLAYER_NAME);
+		format(FieldBuffer, sizeof(FieldBuffer), "player=\"%s\"", name);
+	}
+	return LOGGER_FIELD:FieldBuffer;
+}
+
 
 // quote_escape returns a copy of value with all quotes escaped with backslashes
 stock Logger_EscapeQuote(const input[], inputLen, output[], outputLen) {
