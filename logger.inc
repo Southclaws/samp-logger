@@ -63,6 +63,7 @@ stock Logger_Log(const text[], LOGGER_FIELD:...) {
 	);
 
 	if (total == 1) {
+		print(EventBuffer);
 		return;
 	}
 
@@ -96,6 +97,7 @@ stock Logger_Dbg(const handler[], const text[], LOGGER_FIELD:...) {
 	);
 
 	if (total == 2) {
+		print(EventBuffer);
 		return;
 	}
 
@@ -124,6 +126,7 @@ stock Logger_Err(const text[], LOGGER_FIELD:...) {
 	);
 
 	if (total == 1) {
+		_PrintBufferAmxBacktrace();
 		return;
 	}
 
@@ -139,8 +142,7 @@ stock Logger_Err(const text[], LOGGER_FIELD:...) {
 		}
 	}
 
-	print(EventBuffer);
-	PrintAmxBacktrace();
+	_PrintBufferAmxBacktrace();
 }
 
 stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
@@ -151,6 +153,7 @@ stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 	);
 
 	if (total == 1) {
+		_PrintBufferAmxBacktrace();
 		return;
 	}
 
@@ -166,13 +169,20 @@ stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 		}
 	}
 
+	
+	// trigger a crash to escape the gamemode
+	_PrintBufferAmxBacktrace(true);
+}
+
+_PrintBufferAmxBacktrace(bool:crash = false) {
 	print(EventBuffer);
 	PrintAmxBacktrace();
 
-	// trigger a crash to escape the gamemode
-	new File:f = fopen("nonexistentfile", io_read), tmp[1];
-	fread(f, tmp);
-	fclose(f);
+	if(crash) {
+		new File:f = fopen("nonexistentfile", io_read), tmp[1];
+		fread(f, tmp);
+		fclose(f);
+	}
 }
 
 stock Logger_ToggleDebug(const handler[], bool:toggle) {
