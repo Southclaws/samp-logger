@@ -174,7 +174,7 @@ stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 	_PrintBufferAmxBacktrace(true);
 }
 
-_PrintBufferAmxBacktrace(bool:crash = false) {
+static stock _PrintBufferAmxBacktrace(bool:crash = false) {
 	print(EventBuffer);
 	PrintAmxBacktrace();
 
