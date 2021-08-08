@@ -16,16 +16,6 @@ Include in your code and begin using the library:
 #include <logger>
 ```
 
-## Compatibility 
-
-If you prefer to use the old function names, that were in previous versions of samp-logger, then you can re-enable them with the following defintion:
-
-```pawn
-#define SAMP_LOGGER_COMPAT
-```
-
-This will change the function names from the currently updated version.
-
 ## Usage
 
 To log an event:
@@ -67,7 +57,7 @@ Logger_Dbg("weapons", "player changed weapon",
 The logging functions are just string concatenation functions. All `Logger_S` and friends do is format the string into a `key=value` format and simply return the string. So it's easy to write your own field converters:
 
 ```pawn
-stock Logger_W(name[], weaponid) {
+stock Logger_W(const field[], weaponid) {
     new result[MAX_FIELD_NAME + 1 + MAX_FIELD_VALUE];
     new weaponName[32];
     GetWeaponName(weaponid, weaponName, 32);
