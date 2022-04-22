@@ -176,7 +176,7 @@ stock Logger_Fatal(const text[], LOGGER_FIELD:...) {
 
 static stock _PrintBufferAmxBacktrace(bool:crash = false) {
 	print(EventBuffer);
-	PrintAmxBacktrace();
+	PrintBacktrace();
 
 	if(crash) {
 		new File:f = fopen("nonexistentfile", io_read), tmp[1];
